@@ -30,3 +30,9 @@ vim.opt.list = true            -- Show invisible characters
 vim.opt.listchars:append("tab:» ") -- Configure how tabs are displayed
 vim.opt.inccommand = "split"   -- Show substitution results live
 vim.opt.cursorline = true      -- Highlight the current line
+
+-- Configure how diagnostics are displayed
+-- This enables virtual text, which shows error messages at the end of the line
+vim.diagnostic.config({
+  virtual_text = true,
+})
