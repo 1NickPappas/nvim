@@ -1,9 +1,25 @@
 return {
-	"folke/tokyonight.nvim",
-	lazy = false, -- make sure we load this during startup if it is your main colorscheme
-	priority = 1000, -- make sure to load this before all the other start plugins
-	config = function()
-		-- load the colorscheme here
-		vim.cmd([[colorscheme tokyonight]])
-	end,
+  "catppuccin/nvim",
+  name = "catppuccin",
+  priority = 1000, -- Make sure to load this before other plugins that depend on it
+  config = function()
+    -- Configure Catppuccin
+    require("catppuccin").setup({
+      flavour = "mocha", -- The key setting for your request!
+      -- Other flavours: "latte", "frappe", "macchiato"
+
+      -- Bonus: Enable integrations with other plugins
+      integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        telescope = true,
+        treesitter = true,
+        -- For more, see the Catppuccin docs: https://github.com/catppuccin/nvim
+      }
+    })
+
+    -- Setup must be called before loading the colorscheme
+    vim.cmd.colorscheme "catppuccin"
+  end,
 }
