@@ -12,11 +12,11 @@ return {
 		explorer = { enabled = true },
 		indent = { enabled = true },
 		input = { enabled = true },
-		picker = { enabled = true },
+		-- picker = { enabled = true }, -- Prefer telescope
 		notifier = { enabled = true },
 		quickfile = { enabled = true },
 		scope = { enabled = true },
-		scroll = { enabled = true },
+		-- scroll = { enabled = true }, -- Smoother scroll prefer disable
 		statuscolumn = { enabled = true },
 		words = { enabled = true },
 	},
@@ -28,5 +28,20 @@ return {
 			end,
 			desc = "Open LazyGit",
 		},
+	    -- For the Explorer module
+	    {
+	    	"<leader>e",
+	    	function()
+	    		require("snacks").explorer()
+	    	end,
+	    	desc = "Explorer (cwd)",
+	    },
+	    {
+	    	"<leader>E",
+	    	function()
+	    		require("snacks").explorer({ cwd = vim.fn.stdpath("config") })
+	    	end,
+	    	desc = "Explorer (config)",
+	    },
 	},
 }
