@@ -2,10 +2,10 @@
 
 return {
 	-- Syntax Highlighting for the Move language
-	{
-		"tzakian/move.vim",
-		ft = { "move" }, -- Lazy load on the "move" filetype
-	},
+  {
+    "yanganto/move.vim",
+    branch = "sui-move",
+  }
 
 	-- You can add other syntax plugins here in the future
 	-- For example:
