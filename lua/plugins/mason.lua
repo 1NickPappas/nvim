@@ -21,7 +21,7 @@ return {
 				"lua_ls",
 				"pyright",
 				"rust_analyzer",
-				"tsserver",
+				--"tsserver",
 				"html",
 				"cssls",
 				"gopls", -- Example: for Go
