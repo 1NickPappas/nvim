@@ -26,6 +26,7 @@ return {
 				"cssls",
 				"gopls", -- Example: for Go
 				"marksman", -- Example: for Markdown
+				"hls",
 			},
 			-- This setting ensures that `vim.lsp.enable()` is called for all installed servers,
 			-- activating them for use with nvim-lspconfig. This is the key feature of the plugin
