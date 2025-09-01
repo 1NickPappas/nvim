@@ -14,7 +14,14 @@ return {
 			--format_command = 'npx prettier --plugin-search-dir "$(npm root -g)" --plugin=@mysten/prettier-plugin-move --write',
 			format_on_save = true,
 		})
-		-- plugin setup, if any
+		-- setup none-ls for formatting
+		local null_ls = require("null-ls")
+		null_ls.setup({
+			sources = {
+				null_ls.builtins.formatting.rustfmt,
+				null_ls.builtins.formatting.stylua,
+			},
+		})
 	end,
 }
 -- return {
