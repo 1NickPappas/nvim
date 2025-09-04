@@ -44,6 +44,7 @@ vim.lsp.config("*", {
 -- This logic iterates through all servers installed by Mason and applies any
 -- corresponding configuration file found in `lua/core/lsp/configs/`.
 local servers = require("mason-lspconfig").get_installed_servers()
+print(vim.inspect(servers))
 for _, server_name in ipairs(servers) do
 	local server_config_path = "core.lsp.configs." .. server_name
 	-- pcall safely attempts to require the module, preventing errors if it doesn't exist.

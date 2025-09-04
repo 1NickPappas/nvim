@@ -1,28 +1,49 @@
 return {
-	-- Replace with the actual path to your plugin
-	dir = "/Users/nick.pappas/Documents/real_personal_projects/formatter-move.nvim",
-	dependencies = {
-		"nvim-lua/plenary.nvim", -- only if your plugin depends on it
-		"nvimtools/none-ls.nvim", -- optional/recommended, same as the example
+	{
+		"stevearc/conform.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			require("conform").setup({
+				formatters_by_ft = {
+					lua = { "stylua" },
+					rust = { "rustfmt" },
+					javascript = { "prettier" },
+					typescript = { "prettier" },
+					javascriptreact = { "prettier" },
+					typescriptreact = { "prettier" },
+					json = { "prettier" },
+					yaml = { "prettier" },
+					markdown = { "prettier" },
+					html = { "prettier" },
+					css = { "prettier" },
+				},
+				format_on_save = {
+					timeout_ms = 500,
+					lsp_fallback = true,
+				},
+			})
+		end,
 	},
-	-- Set `lazy = false` if you want it loaded immediately
-	--lazy = false,
-	-- Optional: dependencies or config
-	config = function()
-		require("formatter-move").setup({
-			-- Your custom options here
-			--format_command = 'npx prettier --plugin-search-dir "$(npm root -g)" --plugin=@mysten/prettier-plugin-move --write',
-			format_on_save = true,
-		})
-		-- setup none-ls for formatting
-		local null_ls = require("null-ls")
-		null_ls.setup({
-			sources = {
-				null_ls.builtins.formatting.rustfmt,
-				null_ls.builtins.formatting.stylua,
-			},
-		})
-	end,
+	-- {
+	-- 	"mfussenegger/nvim-lint",
+	-- 	event = { "BufReadPre", "BufNewFile" },
+	-- 	config = function()
+	-- 		local lint = require("lint")
+	-- 		lint.linters_by_ft = {
+	-- 			javascript = { "eslint_d" },
+	-- 			typescript = { "eslint_d" },
+	-- 			javascriptreact = { "eslint_d" },
+	-- 			typescriptreact = { "eslint_d" },
+	-- 		}
+	-- 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+	-- 		vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+	-- 			group = lint_augroup,
+	-- 			callback = function()
+	-- 				lint.try_lint()
+	-- 			end,
+	-- 		})
+	-- 	end,
+	-- },
 }
 -- return {
 --   "1NickPappas/formatter-move.nvim",

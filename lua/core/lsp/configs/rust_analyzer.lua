@@ -1,6 +1,23 @@
 -- lua/core/lsp/configs/rust_analyzer.lua
--- This file is intentionally left empty for now.
--- The global LSP settings in lua/core/lsp.lua and the automatic setup from mason-lspconfig.nvim
--- are sufficient for a good default experience with rust-analyzer.
--- You can add server-specific settings here in the future if needed.
+--
+-- Configuration for rust-analyzer
+-- For most use cases, the default settings provided by nvim-lspconfig are excellent.
+-- We return an empty table here to signal that we want to use rust_analyzer with its
+-- default configuration. The global on_attach and capabilities functions from
+-- core/lsp.lua will be automatically applied.
+--
+-- For advanced customization, you can add server-specific settings here.
+-- See: :help lspconfig-server-configurations
+-- Example:
+-- return {
+--   settings = {
+--     ["rust-analyzer"] = {
+--       -- Enable clippy diagnostics on save
+--       checkOnSave = {
+--         command = "clippy",
+--       },
+--     },
+--   },
+-- }
+
 return {}
