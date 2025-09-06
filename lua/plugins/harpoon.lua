@@ -13,7 +13,7 @@ return {
 		-- Action: Adds the current file to the harpoon list.
 		vim.keymap.set("n", "<leader>a", function()
 			harpoon:list():add()
-		end)
+		end, { desc = "Harpoon: Add file" })
 
 		-- basic telescope configuration
 		local conf = require("telescope.config").values
@@ -23,21 +23,29 @@ return {
 				table.insert(file_paths, item.value)
 			end
 
-			require("telescope.pickers").new({}, {
-				prompt_title = "Harpoon",
-				finder = require("telescope.finders").new_table({
-					results = file_paths,
-				}),
-				previewer = conf.file_previewer({}),
-				sorter = conf.generic_sorter({}),
-			}):find()
+			require("telescope.pickers")
+				.new({}, {
+					prompt_title = "Harpoon",
+					finder = require("telescope.finders").new_table({
+						results = file_paths,
+					}),
+					previewer = conf.file_previewer({}),
+					sorter = conf.generic_sorter({}),
+				})
+				:find()
 		end
 
 		-- Key: Ctrl + e
-		-- Action: Toggles the harpoon quick menu using Telescope.
+		-- Action: Toggles the harpoon quick menu.
 		vim.keymap.set("n", "<C-e>", function()
-			toggle_telescope(harpoon:list())
+			harpoon.ui:toggle_quick_menu(harpoon:list())
 		end, { desc = "Open harpoon window" })
+
+		-- Key: Ctrl + e
+		-- Action: Toggles the harpoon quick menu using Telescope.
+		-- vim.keymap.set("n", "<C-e>", function()
+		-- 	toggle_telescope(harpoon:list())
+		-- end, { desc = "Open harpoon window" })
 
 		-- Key: Ctrl + h
 		-- Action: Navigates to the 1st file in the harpoon list.
@@ -61,15 +69,16 @@ return {
 		end)
 
 		-- Toggle previous & next buffers stored within Harpoon list
-		-- Key: Ctrl + Shift + P
+		-- Key: space + h + p
 		-- Action: Navigates to the previous file in the harpoon list.
-		vim.keymap.set("n", "<C-S-P>", function()
+		vim.keymap.set("n", "<leader>hp", function()
 			harpoon:list():prev()
-		end)
-		-- Key: Ctrl + Shift + N
+		end, { desc = "Harpoon previous" })
+
+		-- Key: space + h + n
 		-- Action: Navigates to the next file in the harpoon list.
-		vim.keymap.set("n", "<C-S-N>", function()
+		vim.keymap.set("n", "<leader>hn", function()
 			harpoon:list():next()
-		end)
+		end, { desc = "Harpoon next" })
 	end,
 }
