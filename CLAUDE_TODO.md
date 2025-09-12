@@ -12,10 +12,11 @@ This file contains improvement tasks for the Neovim configuration, organized by 
 
 ### 2. Enhanced TypeScript LSP Settings
 
-- [ ] Add inlay hints configuration to `lua/core/lsp/configs/ts_ls.lua`
-- [ ] Enable auto-import suggestions
-- [ ] Configure import organization settings
-- [ ] Add TypeScript-specific completion settings
+<!---->
+<!-- - [ ] Add inlay hints configuration to `lua/core/lsp/configs/ts_ls.lua` -->
+<!-- - [ ] Enable auto-import suggestions -->
+<!-- - [ ] Configure import organization settings -->
+<!-- - [ ] Add TypeScript-specific completion settings -->
 
 ### 3. Import Management
 
@@ -126,4 +127,3 @@ This file contains improvement tasks for the Neovim configuration, organized by 
 - Test each enhancement thoroughly before moving to the next
 - Consider project-specific needs when implementing features
 - Keep configurations maintainable and well-documented
-
