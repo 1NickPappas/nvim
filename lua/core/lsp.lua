@@ -9,7 +9,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 -- This function is called for every buffer that gets an LSP client attached.
 local function on_attach(client, bufnr)
 	-- Enable completion triggered by <C-x><C-o>
-	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+	vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
 	-- Keymaps for LSP functionality.
 	-- These are buffer-local, so they only apply in buffers with an active LSP.
@@ -26,9 +26,13 @@ local function on_attach(client, bufnr)
 	vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
 
 	-- Enhanced diagnostics navigation
-	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-	
+	vim.keymap.set("n", "[d", function()
+		vim.diagnostic.jump({ count = -1 })
+	end, opts)
+	vim.keymap.set("n", "]d", function()
+		vim.diagnostic.jump({ count = 1 })
+	end, opts)
+
 	-- Enhanced error navigation with fallback
 	vim.keymap.set("n", "[e", function()
 		local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
@@ -36,29 +40,29 @@ local function on_attach(client, bufnr)
 			vim.notify("No errors in buffer", vim.log.levels.INFO)
 			return
 		end
-		vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
+		vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
 	end, opts)
-	
+
 	vim.keymap.set("n", "]e", function()
 		local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
 		if #diagnostics == 0 then
 			vim.notify("No errors in buffer", vim.log.levels.INFO)
 			return
 		end
-		vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
+		vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
 	end, opts)
-	
+
 	vim.keymap.set("n", "[w", function()
-		vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN })
+		vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN })
 	end, opts)
 	vim.keymap.set("n", "]w", function()
-		vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN })
+		vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN })
 	end, opts)
 	vim.keymap.set("n", "[h", function()
-		vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.HINT })
+		vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.HINT })
 	end, opts)
 	vim.keymap.set("n", "]h", function()
-		vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.HINT })
+		vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.HINT })
 	end, opts)
 
 	-- Diagnostics display
@@ -89,7 +93,7 @@ local function on_attach(client, bufnr)
 
 	-- Type definition in float
 	vim.keymap.set("n", "<leader>D", function()
-		local params = vim.lsp.util.make_position_params()
+		local params = vim.lsp.util.make_position_params(0, "utf-8")
 		vim.lsp.buf_request(0, "textDocument/typeDefinition", params, function(_, result)
 			if not result or vim.tbl_isempty(result) then
 				vim.notify("No type definition found")
@@ -108,7 +112,7 @@ local function on_attach(client, bufnr)
 		vim.keymap.set("n", "<leader>rb", ":!cargo build<CR>", opts)
 		vim.keymap.set("n", "<leader>rR", ":!cargo run --release<CR>", opts)
 		vim.keymap.set("n", "<leader>rB", ":!cargo build --release<CR>", opts)
-		
+
 		-- Rust Analyzer specific actions
 		vim.keymap.set("n", "<leader>rm", ":RustLsp expandMacro<CR>", opts)
 		vim.keymap.set("n", "<leader>re", ":RustLsp explainError<CR>", opts)
@@ -143,7 +147,7 @@ for _, server_name in ipairs(servers) do
 		-- with the global defaults we set above.
 		vim.lsp.config(server_name, server_config)
 	end
-	
+
 	-- Enable the LSP server
 	vim.lsp.enable(server_name)
 end
