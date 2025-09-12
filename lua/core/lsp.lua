@@ -98,6 +98,22 @@ local function on_attach(client, bufnr)
 			vim.lsp.util.preview_location(result[1], { border = "rounded" })
 		end)
 	end, opts)
+
+	-- Rust-specific keymaps
+	if client.name == "rust_analyzer" then
+		-- Cargo commands
+		vim.keymap.set("n", "<leader>rc", ":!cargo check<CR>", opts)
+		vim.keymap.set("n", "<leader>rr", ":!cargo run<CR>", opts)
+		vim.keymap.set("n", "<leader>rt", ":!cargo test<CR>", opts)
+		vim.keymap.set("n", "<leader>rb", ":!cargo build<CR>", opts)
+		vim.keymap.set("n", "<leader>rR", ":!cargo run --release<CR>", opts)
+		vim.keymap.set("n", "<leader>rB", ":!cargo build --release<CR>", opts)
+		
+		-- Rust Analyzer specific actions
+		vim.keymap.set("n", "<leader>rm", ":RustLsp expandMacro<CR>", opts)
+		vim.keymap.set("n", "<leader>re", ":RustLsp explainError<CR>", opts)
+		vim.keymap.set("n", "<leader>rd", ":RustLsp renderDiagnostic<CR>", opts)
+	end
 end
 
 -- Register the global configuration using vim.lsp.config.
