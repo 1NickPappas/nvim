@@ -16,6 +16,21 @@ local function get_typescript_server_path(root_dir)
 	return nil
 end
 
+-- Detect if project uses Bun (for potential future use)
+local function get_js_runtime_config(root_dir)
+	local util = require("lspconfig.util")
+	
+	-- Check for Bun
+	if util.path.exists(util.path.join(root_dir, "bun.lockb"))
+		or (util.path.exists(util.path.join(root_dir, "package.json")) and
+			vim.fn.system("grep -q '\"bun\"' " .. util.path.join(root_dir, "package.json"))) then
+		return "bun"
+	end
+	
+	-- Default to Node.js/npm
+	return "node"
+end
+
 return {
 	-- The on_new_config function allows us to dynamically modify the server's
 	-- configuration right before it starts.
