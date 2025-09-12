@@ -27,11 +27,39 @@ return {
 		end
 	end,
 	-- Don't override the global on_attach - let it use the one from core/lsp.lua
-	-- Add any other tsserver-specific settings below.
-	-- For example, to enable inlay hints for function calls:
-	settings = {
-		completions = {
-			completeFunctionCalls = true,
-		},
-	},
+	-- Enhanced TypeScript LSP settings
+	settings = (function()
+		-- Common settings for all JS/TS variants
+		local common_settings = {
+			inlayHints = {
+				includeInlayParameterNameHints = "all",
+				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayVariableTypeHints = true,
+				includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayEnumMemberValueHints = true,
+			},
+			suggest = {
+				includeCompletionsForModuleExports = true,
+				includeCompletionsForImportStatements = true,
+			},
+			preferences = {
+				includePackageJsonAutoImports = "auto",
+				importModuleSpecifier = "shortest",
+				quoteStyle = "auto",
+			},
+		}
+
+		return {
+			completions = {
+				completeFunctionCalls = true,
+			},
+			typescript = common_settings,
+			javascript = common_settings,
+			typescriptreact = common_settings,
+			javascriptreact = common_settings,
+		}
+	end)(),
 }
