@@ -26,6 +26,7 @@ return {
 			new_config.init_options.tsdk = tsdk
 		end
 	end,
+	-- Don't override the global on_attach - let it use the one from core/lsp.lua
 	-- Add any other tsserver-specific settings below.
 	-- For example, to enable inlay hints for function calls:
 	settings = {

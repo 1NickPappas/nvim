@@ -28,12 +28,26 @@ local function on_attach(client, bufnr)
 	-- Enhanced diagnostics navigation
 	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+	
+	-- Enhanced error navigation with fallback
 	vim.keymap.set("n", "[e", function()
+		local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+		if #diagnostics == 0 then
+			vim.notify("No errors in buffer", vim.log.levels.INFO)
+			return
+		end
 		vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
 	end, opts)
+	
 	vim.keymap.set("n", "]e", function()
+		local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+		if #diagnostics == 0 then
+			vim.notify("No errors in buffer", vim.log.levels.INFO)
+			return
+		end
 		vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
 	end, opts)
+	
 	vim.keymap.set("n", "[w", function()
 		vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN })
 	end, opts)
@@ -99,17 +113,31 @@ vim.lsp.config("*", {
 -- This logic iterates through all servers installed by Mason and applies any
 -- corresponding configuration file found in `lua/core/lsp/configs/`.
 local servers = require("mason-lspconfig").get_installed_servers()
-print(vim.inspect(servers))
+
 for _, server_name in ipairs(servers) do
 	local server_config_path = "core.lsp.configs." .. server_name
 	-- pcall safely attempts to require the module, preventing errors if it doesn't exist.
 	local success, server_config = pcall(require, server_config_path)
 
 	if success and server_config then
+		-- Ensure our global on_attach is preserved
+		server_config.on_attach = on_attach
+		server_config.capabilities = capabilities
 		-- vim.lsp.config will intelligently merge the server-specific config
 		-- with the global defaults we set above.
 		vim.lsp.config(server_name, server_config)
 	end
+	
+	-- Enable the LSP server
+	vim.lsp.enable(server_name)
 end
+
+-- Ensure TypeScript LSP is enabled for TS files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+	callback = function()
+		vim.lsp.enable("ts_ls")
+	end,
+})
 
 return M
