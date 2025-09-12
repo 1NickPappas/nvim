@@ -41,3 +41,7 @@ vim.opt.cursorline = true -- Highlight the current line
 vim.diagnostic.config({
 	virtual_text = true,
 })
+
+-- Disable unused providers to reduce warnings
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
