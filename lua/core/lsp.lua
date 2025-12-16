@@ -160,4 +160,21 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Compact language (Midnight smart contracts)
+-- Filetype detection is handled by compact.vim plugin
+
+-- Register compact_lsp configuration (custom LSP, not Mason-installed)
+local compact_config = require("core.lsp.configs.compact_lsp")
+compact_config.on_attach = on_attach
+compact_config.capabilities = capabilities
+vim.lsp.config("compact_lsp", compact_config)
+
+-- Enable compact_lsp for .compact files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "compact" },
+	callback = function()
+		vim.lsp.enable("compact_lsp")
+	end,
+})
+
 return M

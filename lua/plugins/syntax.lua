@@ -38,6 +38,18 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		config = function()
+			-- Register the compact parser before setup
+			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+			parser_config.compact = {
+				install_info = {
+					url = vim.fn.expand("~/Documents/midnight/lsp/compact-tree-sitter"),
+					files = { "src/parser.c" },
+					generate_requires_npm = false,
+					requires_generate_from_grammar = false,
+				},
+				filetype = "compact",
+			}
+
 			require("nvim-treesitter.configs").setup({
 				-- Update this table to include the new languages.
 				ensure_installed = {
